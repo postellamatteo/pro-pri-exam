@@ -5,8 +5,9 @@ class Virgilio:
     def __init__(self,directory:str): #costr piglia percorso assoluto
         self.directory=directory
 
-    class CantoNotFoundError(Exception): #eccezione personalizzata
-        pass
+    class CantoNotFoundError(Exception):
+        def __init__(self, message="canto_number must be between 1 and 34."):
+            super().__init__(message)
 
     #ES 1 leggi canto x e restituisci tutte o n righe
     def read_canto_lines(self,canto_number,strip_lines:bool=False,num_lines:int=None): 
@@ -16,8 +17,8 @@ class Virgilio:
 
         #es16 verifica se esiste il num canto cercato
         if canto_number<1 or canto_number>34: 
-            return f"canto_number must be between 1 and 34."
-
+            raise self.CantoNotFoundError()
+        
         file_path=os.path.join(self.directory,f"Canto_{canto_number}.txt")
         lines=[] #creo array per lines
         try:
@@ -154,19 +155,21 @@ class Virgilio:
         strippati=[v.strip() for v in tutti]
         total_length=sum(len(v) for v in strippati)
         return total_length/len(strippati)
+    
 
 
 path_canti=r"/Users/postella/Documents/py1/pro pri exam/canti" #assoluto
 v=Virgilio(path_canti)
 x=100
-#print(f"prime 5 righe del canto {x}:\n{v.read_canto_lines(x, strip_lines=True, num_lines=5)}\n") 
-#print(f"num versi canto  {x}: {v.count_verses(x)}")
+#print(f"prime 5 righe del canto {x}: {v.read_canto_lines(x, strip_lines=True,num_lines=5)}\n") #es1 
+#print(f"num versi canto {x}: {v.count_verses(x)}") #es2 
 #print(f"num terzine canto  {x}: {v.count_tercets(x)}") #es3 conta terzine 
-#print(f"num 'dante' canto  {x}: {v.count_word(x, "Dante")}")
-#print(f"primo verso in cui appare 'dante' {v.get_verse_with_word(x, "Dante")}")
-#print(f"verso più lungo canto {x}: {v.get_longest_verse(x)}")
-#print(f"canto con più versi: {v.get_longest_canto()}")
-#print(f"conteggio parole 'Dante' e 'amore' nel Canto {x}: {v.count_words(x, ["Dante", "amore"])}")
+#print(f"num 'dante' canto  {x}: {v.count_word(x, "Dante")}") #es4
+#print(f"primo verso in cui appare 'dante' {v.get_verse_with_word(x, "Dante")}") #es5
+#print(f"versi in cui appare 'dante' {v.get_verses_with_word(x, 'Dante')}\n") #es6
+#print(f"verso più lungo canto {x}: {v.get_longest_verse(x)}") #es7
+#print(f"canto con più versi: {v.get_longest_canto()}") #es8
+#print(f"conteggio parole 'Dante' e 'amore' nel Canto {x}: {v.count_words(x, ["Dante", "amore"])}") #es9
 #print(f"primi 3 versi dell'Inferno:\n{v.get_hell_verses()[:3]}")#es10
 #print(f"num versi inferno:{v.count_hell_verses()}") #es11
 #print(f"lung media versi inferno:{v.get_hell_verse_mean_len()}") #es12 
